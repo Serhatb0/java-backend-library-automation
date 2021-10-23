@@ -26,8 +26,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo(){
         return new ApiInfo(
-                "Spring Boot E-Commerce REST APIs",
-                "Spring Boot E-Commerce REST API Documentation",
+                "Spring Boot tamer-capital libary REST APIs",
+                "Spring Boot tamer-capital libary REST API Documentation",
                 "1",
                 "Terms of service",
                 new Contact("Serhat Biricik", "www.biricik.net", "biricikserhat47@gmail.com"),
