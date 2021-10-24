@@ -1,4 +1,4 @@
-package com.tamercapital.tamercapital.core.security;
+package com.tamercapital.tamercapital.Configuration;
 import com.tamercapital.tamercapital.core.security.jwt.AuthEntryPointJwt;
 import com.tamercapital.tamercapital.core.security.jwt.AuthTokenFilter;
 import com.tamercapital.tamercapital.core.security.services.UserDetailsServiceImpl;
