@@ -3,9 +3,8 @@ package com.tamercapital.tamercapital.business.concretes;
 import com.tamercapital.tamercapital.business.abstracts.EmailServiceBusiness;
 import com.tamercapital.tamercapital.business.abstracts.UserService;
 import com.tamercapital.tamercapital.core.security.jwt.JwtUtils;
-import com.tamercapital.tamercapital.core.security.response.JwtResponse;
-import com.tamercapital.tamercapital.core.security.services.UserDetailsImpl;
-import com.tamercapital.tamercapital.core.utilities.*;
+import com.tamercapital.tamercapital.core.security.services.UserDetailsServiceImpl;
+import com.tamercapital.tamercapital.exception.EntityNotFoundException;
 import com.tamercapital.tamercapital.model.Dtos.CreateDtos.LoginRequest;
 import com.tamercapital.tamercapital.model.Dtos.CreateDtos.SignupRequest;
 import com.tamercapital.tamercapital.model.concretes.ERole;
@@ -14,18 +13,14 @@ import com.tamercapital.tamercapital.model.concretes.User;
 import com.tamercapital.tamercapital.repository.RoleRepository;
 import com.tamercapital.tamercapital.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 public class UserManager implements UserService {
@@ -37,24 +32,27 @@ public class UserManager implements UserService {
     private final JwtUtils jwtUtils;
     private final EmailServiceBusiness emailService;
 
+    private final UserDetailsServiceImpl userDetailsService;
+
     @Autowired
-    public UserManager(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils, EmailServiceBusiness emailService) {
+    public UserManager(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils, EmailServiceBusiness emailService, UserDetailsServiceImpl userDetailsService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
         this.emailService = emailService;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
-    public Result register(SignupRequest signupRequest) {
+    public User register(SignupRequest signupRequest) {
 
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
-            return new ErrorResult("Bu Kullanıc Adı Zaten var");
+            throw new EntityNotFoundException("Bu Kullanıcı Adı Zaten Var");
         }
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
-            return new ErrorResult("Bu Email Zaten var");
+            throw new EntityNotFoundException("Bu Email Zaten Mevcut");
         }
 
         User user = new User(signupRequest.getUsername(),
@@ -93,41 +91,34 @@ public class UserManager implements UserService {
             });
         }
         user.setRoles(roles);
-        userRepository.save(user);
-        return new SuccessResult(emailService.sendEmail(user,signupRequest.getEmail()).getMessage());
+        return userRepository.save(user);
+
     }
 
     @Override
-    public DataResult<JwtResponse> login(LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+    public String login(LoginRequest loginRequest) {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        } catch (BadCredentialsException ex) {
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+        }
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
+        final String jwt = jwtUtils.generateToken(userDetails);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
-
-        return new SuccessDataResult<JwtResponse>(  new JwtResponse(
-                jwt,
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles),"Kullanıcı Giriş Yaptı");
+        return jwt;
 
 
     }
 
     @Override
-    public DataResult<Optional<User>> findById(String id) {
-        return null;
+    public Optional<User> findById(String id) {
+        return this.userRepository.findById(id);
     }
 
     @Override
-    public DataResult<User> findByEmailIgnoreCase(String email) {
+    public User findByEmailIgnoreCase(String email) {
 
-        return  new SuccessDataResult<User>(this.userRepository.findByEmailIgnoreCase(email));
+        return this.userRepository.findByEmailIgnoreCase(email);
     }
 
 
