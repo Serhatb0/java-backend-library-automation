@@ -3,9 +3,7 @@ package com.tamercapital.tamercapital.business.concretes;
 import com.tamercapital.tamercapital.business.abstracts.EmailServiceBusiness;
 import com.tamercapital.tamercapital.business.abstracts.UserService;
 import com.tamercapital.tamercapital.core.adapters.EmailService;
-import com.tamercapital.tamercapital.core.utilities.ErrorResult;
-import com.tamercapital.tamercapital.core.utilities.Result;
-import com.tamercapital.tamercapital.core.utilities.SuccessResult;
+import com.tamercapital.tamercapital.exception.EntityNotFoundException;
 import com.tamercapital.tamercapital.model.concretes.ConfirmationEmailToken;
 import com.tamercapital.tamercapital.model.concretes.User;
 import com.tamercapital.tamercapital.repository.ConfirmationEmailTokenRepository;
@@ -37,7 +35,7 @@ public class EmailManager implements EmailServiceBusiness {
     }
 
     @Override
-    public Result sendEmail(User user, String email) {
+    public void sendEmail(User user, String email) {
         ConfirmationEmailToken confirmationEmailToken = new ConfirmationEmailToken(user);
         confirmationEmailTokenRepository.save(confirmationEmailToken);
         SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -47,9 +45,9 @@ public class EmailManager implements EmailServiceBusiness {
         mailMessage.setText("Aktivasyon Linki : "
                 + "http://localhost:8080/api/Users/confirm-account?token=" + confirmationEmailToken.getConfirmationToken());
 
-        this.emailService.sendEmail(mailMessage);
+       this.emailService.sendEmail(mailMessage);
 
-        return new SuccessResult("Email Göderildi : " + user.getEmail());
+
     }
 
     @Override
@@ -66,16 +64,16 @@ public class EmailManager implements EmailServiceBusiness {
     }
 
     @Override
-    public Result confirmUserAccount(String confirmationToken) {
+    public String confirmUserAccount(String confirmationToken) {
         ConfirmationEmailToken emailToken = this.confirmationEmailTokenRepository.findByConfirmationToken(confirmationToken);
 
         if (emailToken != null) {
-            User user = this.userService.findByEmailIgnoreCase(emailToken.getUser().getEmail()).getData();
+            User user = this.userService.findByEmailIgnoreCase(emailToken.getUser().getEmail());
             user.setIsStatus(true);
             this.userRepository.save(user);
-            return new SuccessResult("Aktif Edildi");
+            return "Aktif Edildi";
         }
-        return new ErrorResult("Aktif Edilemedi");
+        throw  new EntityNotFoundException("Aktif Edilemedi");
 
     }
 }

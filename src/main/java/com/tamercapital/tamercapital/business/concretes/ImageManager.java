@@ -2,11 +2,10 @@ package com.tamercapital.tamercapital.business.concretes;
 
 import com.tamercapital.tamercapital.business.abstracts.ImageService;
 import com.tamercapital.tamercapital.core.adapters.CloudinaryService;
-import com.tamercapital.tamercapital.core.utilities.*;
+import com.tamercapital.tamercapital.exception.EntityNotFoundException;
 import com.tamercapital.tamercapital.model.Dtos.CreateDtos.ImageCreateRequest;
 import com.tamercapital.tamercapital.model.concretes.Image;
 import com.tamercapital.tamercapital.repository.ImageRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,9 +25,9 @@ public class ImageManager implements ImageService {
     }
 
     @Override
-    public Result add(ImageCreateRequest imageCreateRequest, MultipartFile file) {
+    public void add(ImageCreateRequest imageCreateRequest, MultipartFile file) {
         if(cloudinaryService.uploadFile(file) == null){
-            return  new ErrorResult("Resim Gonderilemedi");
+            throw new EntityNotFoundException("Resim Gönderilemedi");
         }else {
             Image image = new Image();
             String url = cloudinaryService.uploadFile(file);
@@ -38,32 +37,28 @@ public class ImageManager implements ImageService {
 
 
             this.imageRepository.save(image);
-            return new SuccessDataResult<>("Resim Başarılı Bir Şekilde Kaydedildi");
+
 
         }
     }
 
     @Override
-    public Result delete(String id) {
+    public void delete(String id) {
         Optional<Image> image = this.imageRepository.findById(id);
         if(!image.isPresent()){
-            return  new ErrorResult("Resim Bulunamdı");
+            throw new EntityNotFoundException("Resim Bulunamadı");
         }
         this.imageRepository.deleteById(id);
-        return new SuccessResult("Resim Başarılı Bir Şekilde Silindi");
     }
 
     @Override
-    public DataResult<Optional<Image>> findById(String id) {
+    public Optional<Image> findById(String id) {
         Optional<Image> image = this.imageRepository.findById(id);
         if(!image.isPresent()){
-            return  new ErrorDataResult<>("Resim Bulunamadı");
+            throw new EntityNotFoundException("Resim Bulunamadı");
         }
-        return  new SuccessDataResult<>(this.imageRepository.findById(id));
+        return  this.imageRepository.findById(id);
     }
 
-    @Override
-    public Boolean isExists(int id) {
-        return null;
-    }
+
 }

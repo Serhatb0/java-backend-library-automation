@@ -24,7 +24,8 @@ public class ImageController {
 
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, ImageCreateRequest imageCreateRequest) {
-        return  ResponseEntity.ok(this.imageService.add(imageCreateRequest, file));
+        this.imageService.add(imageCreateRequest, file);
+        return ResponseEntity.ok().build();
 
     }
 }
