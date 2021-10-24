@@ -1,7 +1,7 @@
 package com.tamercapital.tamercapital.business.concretes;
 
 import com.tamercapital.tamercapital.business.abstracts.BookTypeService;
-import com.tamercapital.tamercapital.core.utilities.*;
+import com.tamercapital.tamercapital.exception.EntityNotFoundException;
 import com.tamercapital.tamercapital.model.Dtos.CreateDtos.BookTypeCreateRequest;
 import com.tamercapital.tamercapital.model.Dtos.UpdateDtos.BookTypeUpdateRequest;
 import com.tamercapital.tamercapital.model.Dtos.ViewDtos.BookTypeViewRequest;
@@ -26,53 +26,52 @@ public class BookTypeManager implements BookTypeService {
     }
 
     @Override
-    public Result add(BookTypeCreateRequest bookTypeCreateRequest) {
+    public BookType add(BookTypeCreateRequest bookTypeCreateRequest) {
         BookType bookType = new BookType();
 
-        BeanUtils.copyProperties(bookTypeCreateRequest,bookType);
-        this.bookTypeRepository.save(bookType);
-        return  new SuccessDataResult<>(bookType,"Kitap Tipi Başarılı Bir Şekilde Eklendi");
+        BeanUtils.copyProperties(bookTypeCreateRequest, bookType);
+        return this.bookTypeRepository.save(bookType);
+
     }
 
     @Override
-    public Result update(String id,BookTypeUpdateRequest bookTypeUpdateRequest) {
+    public void update(String id, BookTypeUpdateRequest bookTypeUpdateRequest) {
         Optional<BookType> optionalBookType = this.bookTypeRepository.findById(id);
 
-        if(!optionalBookType.isPresent()){
-            return  new ErrorResult("Kitap Tipi Veritabınında Mevcut Değil");
+        if (!optionalBookType.isPresent()) {
+            throw new EntityNotFoundException("Kitap VeriTabında Mevcut Değil");
         }
         BookType bookType = optionalBookType.get();
         bookType.setTypeName(bookTypeUpdateRequest.getTypeName());
-        return  new SuccessDataResult<>(bookType,"Kitap Tipi Güncellendi");
+
 
     }
 
     @Override
-    public Result delete(String id) {
+    public void delete(String id) {
         Optional<BookType> bookType = this.bookTypeRepository.findById(id);
-        if(!bookType.isPresent()){
-            return  new ErrorResult("Kitap tipi Bulunamadı");
+        if (!bookType.isPresent()) {
+            throw new EntityNotFoundException("Kitap Bulunamadı");
         }
         this.bookTypeRepository.deleteById(id);
-        return  new SuccessDataResult<>(bookType,"Kitap Tipi Başarılı Bir Şekilde Silindi");
+
 
     }
 
     @Override
-    public DataResult<Optional<BookType>> findAllById(String id) {
+    public Optional<BookType> findAllById(String id) {
         Optional<BookType> bookType = this.bookTypeRepository.findById(id);
-        if(!bookType.isPresent()){
-            return new ErrorDataResult<>("Kitap Tipi Bulunamadı");
+        if (!bookType.isPresent()) {
+            throw new EntityNotFoundException("Kitap Bulunamadı");
 
         }
-        return new SuccessDataResult<>(this.bookTypeRepository.findById(id),"");
+        return this.bookTypeRepository.findById(id);
 
     }
 
     @Override
-    public DataResult<List<BookTypeViewRequest>> getAll() {
-        return new SuccessDataResult<List<BookTypeViewRequest>>(
-                this.bookTypeRepository.findAll().stream().map(BookTypeViewRequest::of)
-                        .collect(Collectors.toList()));
+    public List<BookTypeViewRequest> getAll() {
+        return this.bookTypeRepository.findAll().stream().map(BookTypeViewRequest::of)
+                .collect(Collectors.toList());
     }
 }

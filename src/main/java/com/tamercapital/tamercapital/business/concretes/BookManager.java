@@ -4,7 +4,7 @@ import com.tamercapital.tamercapital.business.abstracts.AuthorService;
 import com.tamercapital.tamercapital.business.abstracts.BookService;
 import com.tamercapital.tamercapital.business.abstracts.BookTypeService;
 import com.tamercapital.tamercapital.business.abstracts.ImageService;
-import com.tamercapital.tamercapital.core.utilities.*;
+import com.tamercapital.tamercapital.exception.EntityNotFoundException;
 import com.tamercapital.tamercapital.model.Dtos.CreateDtos.BookCreateRequest;
 import com.tamercapital.tamercapital.model.Dtos.UpdateDtos.BookUpdateRequest;
 import com.tamercapital.tamercapital.model.Dtos.ViewDtos.BookViewRequest;
@@ -38,29 +38,28 @@ public class BookManager implements BookService {
     }
 
     @Override
-    public Result add(BookCreateRequest bookCreateRequest) {
-        DataResult<Optional<Author>> author = this.authorService.findById(bookCreateRequest.getAuthorId());
-        DataResult<Optional<Image>> image = this.imageService.findById(bookCreateRequest.getImageId());
-        DataResult<Optional<BookType>> bookType = this.bookTypeService.findAllById(bookCreateRequest.getTypeId());
+    public Book add(BookCreateRequest bookCreateRequest) {
+        Optional<Author> author = this.authorService.findById(bookCreateRequest.getAuthorId());
+        Optional<Image> image = this.imageService.findById(bookCreateRequest.getImageId());
+        Optional<BookType> bookType = this.bookTypeService.findAllById(bookCreateRequest.getTypeId());
 
         Book book = new Book();
         BeanUtils.copyProperties(bookCreateRequest,book);
-        book.setAuthor(author.getData().get());
-        book.setImage(image.getData().get());
-        book.setBookType(bookType.getData().get());
-         this.bookRepository.save(book);
-         return  new SuccessDataResult<>(book,"Kitap Başarılı Bir Şekilde Eklendi");
+        book.setAuthor(author.get());
+        book.setImage(image.get());
+        book.setBookType(bookType.get());
+        return this.bookRepository.save(book);
 
     }
 
     @Override
-    public Result update(String id, BookUpdateRequest bookUpdateRequest) {
-        DataResult<Optional<Author>> author = this.authorService.findById(bookUpdateRequest.getAuthorId());
-        DataResult<Optional<Image>> image = this.imageService.findById(bookUpdateRequest.getImageId());
-        DataResult<Optional<BookType>> bookType = this.bookTypeService.findAllById(bookUpdateRequest.getTypeId());
+    public Book update(String id, BookUpdateRequest bookUpdateRequest) {
+        Optional<Author> author = this.authorService.findById(bookUpdateRequest.getAuthorId());
+        Optional<Image> image = this.imageService.findById(bookUpdateRequest.getImageId());
+        Optional<BookType> bookType = this.bookTypeService.findAllById(bookUpdateRequest.getTypeId());
         Optional<Book> optionalBook = this.bookRepository.findById(id);
         if(!optionalBook.isPresent()){
-            return  new ErrorResult("Kitap Bulunamadı");
+            throw  new EntityNotFoundException("Kitap Bulunamadı");
         }
 
         Book book = optionalBook.get();
@@ -68,39 +67,37 @@ public class BookManager implements BookService {
         book.setName(bookUpdateRequest.getName());
         book.setInternationalStandardBookNumber(bookUpdateRequest.getInternationalStandardBookNumber());
         book.setPageCount(bookUpdateRequest.getPageCount());
-        book.setAuthor(author.getData().get());
-        book.setImage(image.getData().get());
-        book.setBookType(bookType.getData().get());
-        this.bookRepository.save(book);
-        return  new SuccessDataResult<>(book,"Kitap Güncellendi");
+        book.setAuthor(author.get());
+        book.setImage(image.get());
+        book.setBookType(bookType.get());
+        return this.bookRepository.save(book);
+
 
 
     }
 
     @Override
-    public Result delete(String id) {
+    public void delete(String id) {
         Optional<Book> book = this.bookRepository.findById(id);
         if(!book.isPresent()){
-            return  new ErrorResult("Kitap Bulunamadı");
+            throw  new EntityNotFoundException("Kitap Bulunamadı");
         }
         this.bookRepository.deleteById(id);
-        return  new SuccessResult("Kitap Başarıyla Silindi");
     }
 
     @Override
-    public DataResult<List<BookViewRequest>> getAll() {
-        return new SuccessDataResult<List<BookViewRequest>>(
-                this.bookRepository.findAll().stream().map(BookViewRequest::of)
-                        .collect(Collectors.toList()));
+    public List<BookViewRequest> getAll() {
+        return this.bookRepository.findAll().stream().map(BookViewRequest::of)
+                        .collect(Collectors.toList());
 
     }
 
     @Override
-    public DataResult<Optional<Book>> findById(String id) {
+    public Optional<Book> findById(String id) {
         if(this.bookRepository.findById(id) == null){
-            return  new ErrorDataResult<>("Kitap Bulunamadı");
+            throw  new EntityNotFoundException("Kitap Bulunamadı");
         }
-        return  new SuccessDataResult<>(this.bookRepository.findById(id),"Kitap Bulundu");
+        return this.bookRepository.findById(id);
     }
 
 

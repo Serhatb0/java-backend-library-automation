@@ -1,7 +1,7 @@
 package com.tamercapital.tamercapital.business.concretes;
 
 import com.tamercapital.tamercapital.business.abstracts.AuthorService;
-import com.tamercapital.tamercapital.core.utilities.*;
+import com.tamercapital.tamercapital.exception.EntityNotFoundException;
 import com.tamercapital.tamercapital.model.Dtos.CreateDtos.AuthorCreateRequest;
 import com.tamercapital.tamercapital.model.Dtos.UpdateDtos.AuthorUpdateRequest;
 import com.tamercapital.tamercapital.model.Dtos.ViewDtos.AuthorViewRequest;
@@ -26,23 +26,21 @@ public class AuthorManager implements AuthorService {
     }
 
     @Override
-    public Result add(AuthorCreateRequest authorCreateRequest) {
+    public Author add(AuthorCreateRequest authorCreateRequest) {
         Author author = new Author();
         BeanUtils.copyProperties(authorCreateRequest,author);
-        authorRepository.save(author);
-        return  new SuccessDataResult<>(author,"Yazar Başarıyla  Eklendi");
+        return authorRepository.save(author);
 
     }
 
     @Override
-    public Result delete(String id) {
+    public void delete(String id) {
         Optional<Author> author = authorRepository.findById(id);
         authorRepository.deleteById(id);
-        return  new SuccessDataResult<>(author,"Yazar Başarıyla Silindi");
     }
 
     @Override
-    public Result update(String id, AuthorUpdateRequest authorUpdateRequest) {
+    public Author update(String id, AuthorUpdateRequest authorUpdateRequest) {
         Optional<Author> optionalAuthor = this.authorRepository.findById(id);
 
         Author author = optionalAuthor.get();
@@ -50,27 +48,26 @@ public class AuthorManager implements AuthorService {
         author.setFirstName(authorUpdateRequest.getFirstName());
         author.setLastName(authorUpdateRequest.getFirstName());
 
-        this.authorRepository.save(author);
-        return  new SuccessDataResult<>(author,"Yaza Güncellendi");
+        return this.authorRepository.save(author);
 
 
-    }
-
-    @Override
-    public DataResult<List<AuthorViewRequest>> getAll() {
-        return  new SuccessDataResult<List<AuthorViewRequest>>(
-                this.authorRepository.findAll().stream().map(AuthorViewRequest::of)
-                        .collect(Collectors.toList()));
 
     }
 
     @Override
-    public DataResult<Optional<Author>> findById(String id) {
+    public List<AuthorViewRequest> getAll() {
+        return this.authorRepository.findAll().stream().map(AuthorViewRequest::of)
+                        .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public Optional<Author> findById(String id) {
         Optional<Author> author = this.authorRepository.findById(id);
         if(!author.isPresent()){
-            return  new ErrorDataResult<>("Yazar Bulunamadı");
+            throw  new EntityNotFoundException("Yazar Bulunamadı");
 
         }
-        return  new SuccessDataResult<>(this.authorRepository.findById(id),"");
+        return  this.authorRepository.findById(id);
     }
 }
