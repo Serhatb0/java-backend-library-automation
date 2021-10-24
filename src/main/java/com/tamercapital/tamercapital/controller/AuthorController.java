@@ -34,7 +34,8 @@ public class AuthorController {
 
     @DeleteMapping("/author/{authorId}")
     public ResponseEntity<?> delete(@PathVariable("authorId") String id){
-        return  ResponseEntity.ok(this.authorService.delete(id));
+        this.authorService.delete(id);
+        return ResponseEntity.ok().build();
     }
 
 
