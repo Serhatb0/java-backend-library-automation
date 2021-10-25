@@ -10,10 +10,11 @@ import com.tamercapital.tamercapital.model.concretes.Book;
 import com.tamercapital.tamercapital.model.concretes.BookType;
 import com.tamercapital.tamercapital.model.concretes.Image;
 import com.tamercapital.tamercapital.repository.BookRepository;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
+import org.mockito.internal.MockedConstructionImpl;
 
 import java.util.Optional;
 
@@ -58,6 +59,7 @@ public class BookManagerTest {
                 .build();
 
         Image image = Image.builder()
+                .id("6171248a15e6ef1e23398234")
                 .imageName("Jpeg")
                 .deleteId("23132123123")
                 .imageUrl("https://res.cloudinary.com/dmeviw9q7/image/upload/v1628713288/hblb3uxvprsvrchp3xbx.jpg")
@@ -65,10 +67,12 @@ public class BookManagerTest {
 
 
         BookType bookType = BookType.builder()
+                .id("123231")
                 .typeName("Roman")
                 .build();
 
         Book book = Book.builder()
+                .id("324342")
                 .name(bookCreateRequest.getName())
                 .pageCount(bookCreateRequest.getPageCount())
                 .internationalStandardBookNumber(bookCreateRequest.getInternationalStandardBookNumber())
@@ -78,10 +82,13 @@ public class BookManagerTest {
                 .build();
 
 
+
         Mockito.when(authorService.findById("6171248a15e6ef1e23398821")).thenReturn(Optional.of(author));
         Mockito.when(bookRepository.save(book)).thenReturn(book);
         Mockito.when(imageService.findById("6172ca419ea9282a410d1354")).thenReturn(Optional.of(image));
         Mockito.when(bookTypeService.findById("6171a427da6f7d3c18cb8d03")).thenReturn(Optional.of(bookType));
+
+
 
     }
 

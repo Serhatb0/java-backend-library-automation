@@ -1,10 +1,7 @@
 package com.tamercapital.tamercapital.model.concretes;
 
 import com.tamercapital.tamercapital.model.concretes.Author;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
