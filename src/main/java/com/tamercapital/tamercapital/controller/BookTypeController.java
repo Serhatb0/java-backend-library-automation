@@ -20,7 +20,7 @@ public class BookTypeController {
 
     @GetMapping("/bookType/{id}")
     public ResponseEntity<?> findById(@PathVariable  String id){
-       return  ResponseEntity.ok(this.bookTypeService.findAllById(id));
+       return  ResponseEntity.ok(this.bookTypeService.findById(id));
     }
 
     @PostMapping("/bookType/add")

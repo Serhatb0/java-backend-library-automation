@@ -16,7 +16,7 @@ public interface BookTypeService {
 
     void delete(String id);
 
-    Optional<BookType> findAllById(String id);
+    Optional<BookType> findById(String id);
 
     List<BookTypeViewRequest> getAll();
 }

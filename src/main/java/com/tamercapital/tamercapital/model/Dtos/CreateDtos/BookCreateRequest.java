@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 @Data
 public class BookCreateRequest {
 
+    private String Id;
+
     @UniqueBookName
     @NotBlank
     @NotNull

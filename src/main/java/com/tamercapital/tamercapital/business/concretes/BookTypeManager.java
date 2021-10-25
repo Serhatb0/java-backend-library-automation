@@ -59,7 +59,7 @@ public class BookTypeManager implements BookTypeService {
     }
 
     @Override
-    public Optional<BookType> findAllById(String id) {
+    public Optional<BookType> findById(String id) {
         Optional<BookType> bookType = this.bookTypeRepository.findById(id);
         if (!bookType.isPresent()) {
             throw new EntityNotFoundException("Kitap Bulunamadı");

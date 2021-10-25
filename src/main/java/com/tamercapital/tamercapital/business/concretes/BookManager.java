@@ -41,14 +41,14 @@ public class BookManager implements BookService {
     public Book add(BookCreateRequest bookCreateRequest) {
         Optional<Author> author = this.authorService.findById(bookCreateRequest.getAuthorId());
         Optional<Image> image = this.imageService.findById(bookCreateRequest.getImageId());
-        Optional<BookType> bookType = this.bookTypeService.findAllById(bookCreateRequest.getTypeId());
+        Optional<BookType> bookType = this.bookTypeService.findById(bookCreateRequest.getTypeId());
 
         Book book = new Book();
         BeanUtils.copyProperties(bookCreateRequest,book);
         book.setAuthor(author.get());
         book.setImage(image.get());
         book.setBookType(bookType.get());
-        return this.bookRepository.save(book);
+         return  this.bookRepository.save(book);
 
     }
 
@@ -56,7 +56,7 @@ public class BookManager implements BookService {
     public Book update(String id, BookUpdateRequest bookUpdateRequest) {
         Optional<Author> author = this.authorService.findById(bookUpdateRequest.getAuthorId());
         Optional<Image> image = this.imageService.findById(bookUpdateRequest.getImageId());
-        Optional<BookType> bookType = this.bookTypeService.findAllById(bookUpdateRequest.getTypeId());
+        Optional<BookType> bookType = this.bookTypeService.findById(bookUpdateRequest.getTypeId());
         Optional<Book> optionalBook = this.bookRepository.findById(id);
         if(!optionalBook.isPresent()){
             throw  new EntityNotFoundException("Kitap Bulunamadı");
