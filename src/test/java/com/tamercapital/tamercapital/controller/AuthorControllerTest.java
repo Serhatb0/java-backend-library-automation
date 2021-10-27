@@ -96,7 +96,6 @@ public class AuthorControllerTest {
 
     @Test
     void whenCallListAll_Author_thenReturns200() throws Exception {
-        // given
         AuthorViewRequest request = AuthorViewRequest.builder()
                 .id("12345")
                 .firstName("Serhat")
@@ -104,12 +103,10 @@ public class AuthorControllerTest {
                 .build();
         when(authorService.getAll()).thenReturn(Arrays.asList(request));
 
-        // when
         MvcResult mvcResult = mockMvc.perform(get("/api/author")
                 .accept(CONTENT_TYPE)).andReturn();
 
 
-        // then
         String responseBody = mvcResult.getResponse().getContentAsString();
         verify(authorService, times(1)).getAll();
         assertThat(objectMapper.writeValueAsString(Arrays.asList(request)))
