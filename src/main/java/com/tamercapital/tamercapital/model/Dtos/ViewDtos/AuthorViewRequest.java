@@ -2,6 +2,7 @@ package com.tamercapital.tamercapital.model.Dtos.ViewDtos;
 
 import com.tamercapital.tamercapital.model.concretes.Author;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -9,6 +10,7 @@ import org.springframework.data.annotation.Id;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AuthorViewRequest {
 
 
