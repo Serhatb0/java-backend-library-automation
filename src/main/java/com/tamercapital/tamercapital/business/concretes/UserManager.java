@@ -90,7 +90,9 @@ public class UserManager implements UserService {
                 }
             });
         }
+
         user.setRoles(roles);
+        emailService.sendEmail(user,user.getEmail());
         return userRepository.save(user);
 
     }
