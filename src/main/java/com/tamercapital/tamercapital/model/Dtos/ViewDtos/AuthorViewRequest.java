@@ -16,12 +16,12 @@ public class AuthorViewRequest {
     private String id;
     private String firstName;
     private String lastName;
-    private String ımageUrl;
+
 
 
     public  static  AuthorViewRequest of(Author author){
         return  new AuthorViewRequest(author.getId(),author.getFirstName(),
-                author.getLastName(),author.getImage().getImageUrl());
+                author.getLastName());
     }
 
 }

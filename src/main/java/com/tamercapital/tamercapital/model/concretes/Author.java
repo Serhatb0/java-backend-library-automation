@@ -20,8 +20,6 @@ public class Author {
     private String firstName;
     private String lastName;
 
-    @DBRef
-    private Image ımage;
 
 
 }

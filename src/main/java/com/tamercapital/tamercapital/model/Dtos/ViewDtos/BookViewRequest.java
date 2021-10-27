@@ -25,12 +25,16 @@ public class BookViewRequest implements Serializable {
 
     private String authorName;
 
+    private String bookTypeName;
+
+    private  String imageUrl;
+
 
 
     public  static  BookViewRequest of(Book book){
         return  new BookViewRequest(book.getId(),book.getName(),
                 book.getPageCount(),book.getInternationalStandardBookNumber(),
-                book.getAuthor().getFirstName());
+                book.getAuthor().getFirstName(),book.getBookType().getTypeName(),book.getImage().getImageUrl());
     }
 
 

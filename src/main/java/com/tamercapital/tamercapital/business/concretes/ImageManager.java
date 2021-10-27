@@ -25,7 +25,7 @@ public class ImageManager implements ImageService {
     }
 
     @Override
-    public void add(ImageCreateRequest imageCreateRequest, MultipartFile file) {
+    public Image add(ImageCreateRequest imageCreateRequest, MultipartFile file) {
         if(cloudinaryService.uploadFile(file) == null){
             throw new EntityNotFoundException("Resim Gönderilemedi");
         }else {
@@ -36,10 +36,11 @@ public class ImageManager implements ImageService {
             image.setDeleteId(url.substring(61,81));
 
 
-            this.imageRepository.save(image);
+           return this.imageRepository.save(image);
 
 
         }
+
     }
 
     @Override

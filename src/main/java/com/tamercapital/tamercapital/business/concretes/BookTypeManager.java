@@ -35,7 +35,7 @@ public class BookTypeManager implements BookTypeService {
     }
 
     @Override
-    public void update(String id, BookTypeUpdateRequest bookTypeUpdateRequest) {
+    public BookType update(String id, BookTypeUpdateRequest bookTypeUpdateRequest) {
         Optional<BookType> optionalBookType = this.bookTypeRepository.findById(id);
 
         if (!optionalBookType.isPresent()) {
@@ -43,6 +43,7 @@ public class BookTypeManager implements BookTypeService {
         }
         BookType bookType = optionalBookType.get();
         bookType.setTypeName(bookTypeUpdateRequest.getTypeName());
+        return bookType;
 
 
     }
@@ -50,9 +51,7 @@ public class BookTypeManager implements BookTypeService {
     @Override
     public void delete(String id) {
         Optional<BookType> bookType = this.bookTypeRepository.findById(id);
-        if (!bookType.isPresent()) {
-            throw new EntityNotFoundException("Kitap Bulunamadı");
-        }
+
         this.bookTypeRepository.deleteById(id);
 
 

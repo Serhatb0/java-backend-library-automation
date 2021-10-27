@@ -58,9 +58,7 @@ public class BookManager implements BookService {
         Optional<Image> image = this.imageService.findById(bookUpdateRequest.getImageId());
         Optional<BookType> bookType = this.bookTypeService.findById(bookUpdateRequest.getTypeId());
         Optional<Book> optionalBook = this.bookRepository.findById(id);
-        if(!optionalBook.isPresent()){
-            throw  new EntityNotFoundException("Kitap Bulunamadı");
-        }
+
 
         Book book = optionalBook.get();
 
@@ -78,8 +76,9 @@ public class BookManager implements BookService {
 
     @Override
     public void delete(String id) {
-        Optional<Book> book = this.bookRepository.findById(id);
-        if(!book.isPresent()){
+        Optional<Book> optionalBook = this.bookRepository.findById(id);
+
+        if(optionalBook.isPresent()){
             throw  new EntityNotFoundException("Kitap Bulunamadı");
         }
         this.bookRepository.deleteById(id);

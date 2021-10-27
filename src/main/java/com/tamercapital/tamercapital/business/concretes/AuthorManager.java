@@ -7,7 +7,6 @@ import com.tamercapital.tamercapital.model.Dtos.CreateDtos.AuthorCreateRequest;
 import com.tamercapital.tamercapital.model.Dtos.UpdateDtos.AuthorUpdateRequest;
 import com.tamercapital.tamercapital.model.Dtos.ViewDtos.AuthorViewRequest;
 import com.tamercapital.tamercapital.model.concretes.Author;
-import com.tamercapital.tamercapital.model.concretes.Image;
 import com.tamercapital.tamercapital.repository.AuthorRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,21 +20,17 @@ import java.util.stream.Collectors;
 public class AuthorManager implements AuthorService {
 
     private final AuthorRepository authorRepository;
-    private  final ImageService imageService;
 
 
     @Autowired
-    public AuthorManager(AuthorRepository authorRepository, ImageService imageService) {
+    public AuthorManager(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
-        this.imageService = imageService;
     }
 
     @Override
     public Author add(AuthorCreateRequest authorCreateRequest) {
         Author author = new Author();
-        Optional<Image> image = this.imageService.findById(authorCreateRequest.getImageId());
         BeanUtils.copyProperties(authorCreateRequest,author);
-        author.setImage(image.get());
         return authorRepository.save(author);
 
     }

@@ -15,8 +15,9 @@ public class Book {
     @Id
     private String id;
     private String name;
-    private String internationalStandardBookNumber;
+
     private String pageCount;
+    private String internationalStandardBookNumber;
     @DBRef
     private Author author;
 

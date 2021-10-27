@@ -5,6 +5,7 @@ import com.tamercapital.tamercapital.business.abstracts.BookService;
 import com.tamercapital.tamercapital.model.Dtos.CreateDtos.BookCreateRequest;
 import com.tamercapital.tamercapital.model.Dtos.UpdateDtos.BookUpdateRequest;
 import com.tamercapital.tamercapital.model.Dtos.ViewDtos.BookViewRequest;
+import com.tamercapital.tamercapital.model.concretes.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,6 +33,7 @@ public class BookController {
     @PutMapping("/book/{bookId}")
     public ResponseEntity<?> update(@Valid @PathVariable("bookId") String id,@RequestBody BookUpdateRequest bookUpdateRequest){
         return  ResponseEntity.ok(this.bookService.update(id,bookUpdateRequest));
+
     }
 
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")

@@ -12,7 +12,7 @@ public interface BookTypeService {
 
     BookType add(BookTypeCreateRequest bookTypeCreateRequest);
 
-    void update(String id,BookTypeUpdateRequest bookTypeUpdateRequest);
+    BookType update(String id,BookTypeUpdateRequest bookTypeUpdateRequest);
 
     void delete(String id);
 

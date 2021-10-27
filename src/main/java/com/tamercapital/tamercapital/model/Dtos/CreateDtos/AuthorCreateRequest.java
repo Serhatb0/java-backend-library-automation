@@ -1,13 +1,19 @@
 package com.tamercapital.tamercapital.model.Dtos.CreateDtos;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AuthorCreateRequest {
 
+
+    private String id;
 
     @NotBlank
     @NotNull
@@ -16,7 +22,5 @@ public class AuthorCreateRequest {
     @NotNull
     private String lastName;
 
-    @NotBlank
-    @NotNull
-    private String ımageId;
+
 }

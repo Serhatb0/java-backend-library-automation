@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ImageService {
 
-    void add(ImageCreateRequest imageCreateRequest, MultipartFile file);
+    Image add(ImageCreateRequest imageCreateRequest, MultipartFile file);
 
     void delete(String id);
 
