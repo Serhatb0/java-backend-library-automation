@@ -3,6 +3,7 @@ package com.tamercapital.tamercapital.model.Dtos.CreateDtos;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class SignupRequest implements Serializable {
 

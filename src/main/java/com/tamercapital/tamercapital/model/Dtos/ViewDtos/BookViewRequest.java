@@ -2,6 +2,7 @@ package com.tamercapital.tamercapital.model.Dtos.ViewDtos;
 
 import com.tamercapital.tamercapital.model.concretes.Book;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor
 public class BookViewRequest implements Serializable {
 
