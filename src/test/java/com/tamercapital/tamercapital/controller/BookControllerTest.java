@@ -107,7 +107,6 @@ public class BookControllerTest {
 
     @Test
     void whenCallListAll_Book_thenReturns200() throws Exception {
-        // given
         BookViewRequest request = BookViewRequest.builder()
                 .id("12345")
                 .authorName("Serhat")
@@ -119,12 +118,10 @@ public class BookControllerTest {
                 .build();
         when(bookService.getAll()).thenReturn(Arrays.asList(request));
 
-        // when
         MvcResult mvcResult = mockMvc.perform(get("/api/book")
                 .accept(CONTENT_TYPE)).andReturn();
 
 
-        // then
         String responseBody = mvcResult.getResponse().getContentAsString();
         verify(bookService, times(1)).getAll();
         assertThat(objectMapper.writeValueAsString(Arrays.asList(request)))
