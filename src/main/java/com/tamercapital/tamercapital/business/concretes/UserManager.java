@@ -20,6 +20,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Service
@@ -98,7 +99,7 @@ public class UserManager implements UserService {
     }
 
     @Override
-    public String login(LoginRequest loginRequest) {
+    public String login(LoginRequest loginRequest ,HttpSession session) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         } catch (BadCredentialsException ex) {
@@ -106,6 +107,8 @@ public class UserManager implements UserService {
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
         final String jwt = jwtUtils.generateToken(userDetails);
+        session.setAttribute("username",userDetails.getUsername());
+        session.setAttribute("password",userDetails.getPassword());
 
         return jwt;
 
