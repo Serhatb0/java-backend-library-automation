@@ -22,24 +22,24 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
-    @GetMapping("/author")
+    @GetMapping()
     public  ResponseEntity<?> getAll(){
         return  ResponseEntity.ok(this.authorService.getAll());
     }
 
-    @PutMapping("/author/{authorId}")
+    @PutMapping("/{authorId}")
     public ResponseEntity<?> update(@Valid @PathVariable("authorId") String id, @RequestBody AuthorUpdateRequest authorUpdateRequest){
         return  ResponseEntity.ok(this.authorService.update(id,authorUpdateRequest));
     }
 
-    @DeleteMapping("/author/{authorId}")
+    @DeleteMapping("/delete/{authorId}")
     public ResponseEntity<?> delete(@PathVariable("authorId") String id){
         this.authorService.delete(id);
         return ResponseEntity.ok().build();
     }
 
 
-    @PostMapping("/author/add")
+    @PostMapping("/add")
     public ResponseEntity<?> add(@Valid @RequestBody AuthorCreateRequest authorCreateRequest){
         return  ResponseEntity.ok(this.authorService.add(authorCreateRequest));
     }
