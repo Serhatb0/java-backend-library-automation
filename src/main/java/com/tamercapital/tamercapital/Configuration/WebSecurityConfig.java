@@ -1,9 +1,10 @@
 package com.tamercapital.tamercapital.Configuration;
+
 import com.tamercapital.tamercapital.core.security.jwt.AuthEntryPointJwt;
 import com.tamercapital.tamercapital.core.security.jwt.AuthTokenFilter;
 import com.tamercapital.tamercapital.core.security.services.UserDetailsServiceImpl;
 import com.tamercapital.tamercapital.model.concretes.ERole;
-import  org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,7 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(
         prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
+    @Autowired(required = true)
     UserDetailsServiceImpl userDetailsService;
 
     @Autowired
@@ -57,7 +58,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers(
-                        "/api/user/**",
+                        "test",
+                        "/api/users/**",
+                        "/api/bookType/add",
+                        "/api/author/add",
+                        "/api/author/{authorId}",
+                        "/api/author",
                         "/",
                         "/v2/api-docs",
                         "/webjars/**",
@@ -70,6 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js"
                 ).permitAll()
                 .anyRequest().authenticated();
+
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

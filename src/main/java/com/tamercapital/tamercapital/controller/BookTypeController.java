@@ -18,12 +18,12 @@ public class BookTypeController {
         this.bookTypeService = bookTypeService;
     }
 
-    @GetMapping("/bookType/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable  String id){
        return  ResponseEntity.ok(this.bookTypeService.findById(id));
     }
 
-    @PostMapping("/bookType/add")
+    @PostMapping("/add")
     public  ResponseEntity<?> add(@Valid @RequestBody BookTypeCreateRequest bookTypeCreateRequest){
         return  ResponseEntity.ok(this.bookTypeService.add(bookTypeCreateRequest));
     }

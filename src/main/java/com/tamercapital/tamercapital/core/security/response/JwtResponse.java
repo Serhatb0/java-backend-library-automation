@@ -3,10 +3,11 @@ package com.tamercapital.tamercapital.core.security.response;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class JwtResponse {
+public class JwtResponse implements Serializable {
     private String token;
     private String type = "Bearer";
     private String id;
