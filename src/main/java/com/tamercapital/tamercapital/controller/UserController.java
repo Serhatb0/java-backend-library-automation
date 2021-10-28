@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -19,6 +17,7 @@ import javax.validation.Valid;
 public class UserController {
     private  final EmailServiceBusiness emailService;
     private final UserService userService;
+
 
     @Autowired
     public UserController(EmailServiceBusiness emailService, UserService userService) {
@@ -32,10 +31,13 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, HttpSession session) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
 
-        return  ResponseEntity.ok(this.userService.login(loginRequest,session));
+        return  ResponseEntity.ok(this.userService.login(loginRequest));
     }
+
+
+
 
 
     @PreAuthorize("hasRole('ADMIN')")

@@ -32,11 +32,12 @@ public class UserManager implements UserService {
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
     private final EmailServiceBusiness emailService;
-
     private final UserDetailsServiceImpl userDetailsService;
+    private final  HttpSession session;
+
 
     @Autowired
-    public UserManager(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils, EmailServiceBusiness emailService, UserDetailsServiceImpl userDetailsService) {
+    public UserManager(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils, EmailServiceBusiness emailService, UserDetailsServiceImpl userDetailsService, HttpSession session) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -44,6 +45,7 @@ public class UserManager implements UserService {
         this.jwtUtils = jwtUtils;
         this.emailService = emailService;
         this.userDetailsService = userDetailsService;
+        this.session = session;
     }
 
     @Override
@@ -99,7 +101,7 @@ public class UserManager implements UserService {
     }
 
     @Override
-    public String login(LoginRequest loginRequest ,HttpSession session) {
+    public String login(LoginRequest loginRequest) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         } catch (BadCredentialsException ex) {
@@ -113,6 +115,12 @@ public class UserManager implements UserService {
         return jwt;
 
 
+    }
+
+    public void logout(HttpSession session) {
+        session.setAttribute("username",null);
+        session.setAttribute("password",null);
+        session.invalidate();
     }
 
     @Override

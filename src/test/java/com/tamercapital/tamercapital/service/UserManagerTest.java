@@ -16,6 +16,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -34,8 +35,8 @@ public class UserManagerTest {
     private PasswordEncoder encoder;
     private JwtUtils jwtUtils;
     private EmailServiceBusiness emailService;
-
     private UserDetailsServiceImpl userDetailsService;
+    private HttpSession session;
 
     @Before
     public void setUp() throws Exception {
@@ -47,10 +48,11 @@ public class UserManagerTest {
         jwtUtils = Mockito.mock(JwtUtils.class);
         emailService = Mockito.mock(EmailServiceBusiness.class);
         userDetailsService = Mockito.mock(UserDetailsServiceImpl.class);
+        session = Mockito.mock(HttpSession.class);
 
 
         userManager = new UserManager(authenticationManager, userRepository, roleRepository
-                , encoder, jwtUtils, emailService, userDetailsService);
+                , encoder, jwtUtils, emailService, userDetailsService,session);
 
 
     }
@@ -76,8 +78,8 @@ public class UserManagerTest {
         final LoginRequest loginRequest = new LoginRequest("serhat", "biricik");
         MockHttpSession session = Mockito.mock(MockHttpSession.class);
 
-        doNothing().when(userManager).login(loginRequest,session);
-        verify(userManager, times(1)).login(loginRequest,session);
+        doNothing().when(userManager).login(loginRequest);
+        verify(userManager, times(1)).login(loginRequest);
 
 
     }

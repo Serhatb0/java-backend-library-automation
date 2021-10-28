@@ -11,10 +11,12 @@ public interface UserService {
 
     User register(SignupRequest signupRequest);
 
-    String login(LoginRequest loginRequest, HttpSession session);
+    String login(LoginRequest loginRequest);
 
     Optional<User> findById(String id);
 
     User findByEmailIgnoreCase(String email);
+
+     void logout(HttpSession session);
 
 }
