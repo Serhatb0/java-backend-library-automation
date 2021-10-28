@@ -108,7 +108,7 @@ public class BookManager implements BookService {
 
 
     @Override
-    public List<Book> findByBookName(BookFilter bookFilter) {
+    public List<Book> searchBook(BookFilter bookFilter) {
         Query query = new Query();
         Criteria criteria = new Criteria();
 

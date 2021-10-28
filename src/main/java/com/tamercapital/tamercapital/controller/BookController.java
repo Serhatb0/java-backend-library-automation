@@ -33,9 +33,9 @@ public class BookController {
     }
 
 
-    @PostMapping("/findByBookName")
-    public  ResponseEntity<?> findByBookName(@RequestBody BookFilter bookFilter){
-        return  ResponseEntity.ok(this.bookService.findByBookName(bookFilter));
+    @PostMapping("/searchBook")
+    public  ResponseEntity<?> searchBook(@RequestBody BookFilter bookFilter){
+        return  ResponseEntity.ok(this.bookService.searchBook(bookFilter));
     }
 
 

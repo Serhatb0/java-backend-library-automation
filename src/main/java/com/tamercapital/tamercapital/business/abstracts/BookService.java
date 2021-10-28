@@ -23,7 +23,7 @@ public interface BookService {
 
     Optional<Book> findById(String id);
 
-    List<Book> findByBookName(BookFilter bookFilter);
+    List<Book> searchBook(BookFilter bookFilter);
 
 
 }
