@@ -27,6 +27,7 @@ public class AuthorController {
         return  ResponseEntity.ok(this.authorService.getAll());
     }
 
+
     @PutMapping("/{authorId}")
     public ResponseEntity<?> update(@Valid @PathVariable("authorId") String id, @RequestBody AuthorUpdateRequest authorUpdateRequest){
         return  ResponseEntity.ok(this.authorService.update(id,authorUpdateRequest));
@@ -43,4 +44,6 @@ public class AuthorController {
     public ResponseEntity<?> add(@Valid @RequestBody AuthorCreateRequest authorCreateRequest){
         return  ResponseEntity.ok(this.authorService.add(authorCreateRequest));
     }
+
+
 }

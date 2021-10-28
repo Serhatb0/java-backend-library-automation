@@ -19,4 +19,10 @@ public interface BookService {
     List<BookViewRequest> getAll();
 
     Optional<Book> findById(String id);
+
+    List<Book> getBookByAuthor(String authorId);
+
+    List<Book> getBooksByAuthorOrName(String author,String name);
+
+    List<Book> getBooksByAuthorFirstNameOrName(String authorName,String bookName);
 }

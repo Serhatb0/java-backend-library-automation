@@ -99,5 +99,20 @@ public class BookManager implements BookService {
         return this.bookRepository.findById(id);
     }
 
+    @Override
+    public List<Book> getBookByAuthor(String authorId) {
+        return  this.bookRepository.getBookByAuthor(authorId);
+    }
+
+    @Override
+    public List<Book> getBooksByAuthorOrName(String authorName, String name) {
+        return  this.bookRepository.getBooksByAuthorOrName(authorName,name);
+    }
+
+    @Override
+    public List<Book> getBooksByAuthorFirstNameOrName(String authorName, String bookName) {
+        return  this.bookRepository.getBooksByAuthorFirstNameOrName(authorName,bookName);
+    }
+
 
 }

@@ -22,10 +22,28 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping("/book/{id}")
+
+
+
+    @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable String id){
         return  ResponseEntity.ok(this.bookService.findById(id));
     }
+
+    @GetMapping("/author/{authorId}")
+    public  ResponseEntity<?> getBookByAuthor(@PathVariable String authorId){
+        return  ResponseEntity.ok(this.bookService.getBookByAuthor(authorId));
+    }
+
+    @GetMapping("/getBooksByAuthorFirstNameOrName")
+    public  ResponseEntity<?> getBooksByAuthorFirstNameOrName(@RequestParam String authorName,@RequestParam String bookName){
+        return  ResponseEntity.ok(this.bookService.getBooksByAuthorFirstNameOrName(authorName,bookName));
+    }
+    @GetMapping("/getBooksByAuthorOrName")
+    public  ResponseEntity<?> getBooksByAuthorOrName(@RequestParam String author , @RequestParam String name){
+        return  ResponseEntity.ok(this.bookService.getBooksByAuthorOrName(author,name));
+    }
+
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     @PutMapping("/{bookId}")
     public ResponseEntity<?> update(@Valid @PathVariable("bookId") String id,@RequestBody BookUpdateRequest bookUpdateRequest){
