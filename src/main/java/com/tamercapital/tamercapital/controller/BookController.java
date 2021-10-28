@@ -2,8 +2,10 @@ package com.tamercapital.tamercapital.controller;
 
 
 import com.tamercapital.tamercapital.business.abstracts.BookService;
+import com.tamercapital.tamercapital.model.BookFilter;
 import com.tamercapital.tamercapital.model.Dtos.CreateDtos.BookCreateRequest;
 import com.tamercapital.tamercapital.model.Dtos.UpdateDtos.BookUpdateRequest;
+import com.tamercapital.tamercapital.model.concretes.BookType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,19 +32,12 @@ public class BookController {
         return  ResponseEntity.ok(this.bookService.findById(id));
     }
 
-    @GetMapping("/author/{authorId}")
-    public  ResponseEntity<?> getBookByAuthor(@PathVariable String authorId){
-        return  ResponseEntity.ok(this.bookService.getBookByAuthor(authorId));
+
+    @PostMapping("/findByBookName")
+    public  ResponseEntity<?> findByBookName(@RequestBody BookFilter bookFilter){
+        return  ResponseEntity.ok(this.bookService.findByBookName(bookFilter));
     }
 
-    @GetMapping("/findByBookNameKeyword")
-    public  ResponseEntity<?> findByBookNameKeyword(@RequestParam String keyword){
-        return  ResponseEntity.ok(this.bookService.findByBookNameKeyword(keyword));
-    }
-    @GetMapping("/getBooksByAuthorOrName")
-    public  ResponseEntity<?> getBooksByAuthorOrName(@RequestParam String author , @RequestParam String name){
-        return  ResponseEntity.ok(this.bookService.getBooksByAuthorOrName(author,name));
-    }
 
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     @PutMapping("/{bookId}")

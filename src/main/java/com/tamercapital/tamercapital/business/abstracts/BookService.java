@@ -1,9 +1,11 @@
 package com.tamercapital.tamercapital.business.abstracts;
 
+import com.tamercapital.tamercapital.model.BookFilter;
 import com.tamercapital.tamercapital.model.Dtos.CreateDtos.BookCreateRequest;
 import com.tamercapital.tamercapital.model.Dtos.UpdateDtos.BookUpdateRequest;
 import com.tamercapital.tamercapital.model.Dtos.ViewDtos.BookViewRequest;
 import com.tamercapital.tamercapital.model.concretes.Book;
+import com.tamercapital.tamercapital.model.concretes.BookType;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -21,11 +23,7 @@ public interface BookService {
 
     Optional<Book> findById(String id);
 
-    List<Book> getBookByAuthor(String authorId);
-
-    List<Book> getBooksByAuthorOrName(String author,String name);
-
-    List<Book> findByBookNameKeyword(String keyword);
+    List<Book> findByBookName(BookFilter bookFilter);
 
 
 }

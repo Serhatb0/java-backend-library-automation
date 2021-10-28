@@ -5,6 +5,7 @@ import com.tamercapital.tamercapital.business.abstracts.BookService;
 import com.tamercapital.tamercapital.business.abstracts.BookTypeService;
 import com.tamercapital.tamercapital.business.abstracts.ImageService;
 import com.tamercapital.tamercapital.exception.EntityNotFoundException;
+import com.tamercapital.tamercapital.model.BookFilter;
 import com.tamercapital.tamercapital.model.Dtos.CreateDtos.BookCreateRequest;
 import com.tamercapital.tamercapital.model.Dtos.UpdateDtos.BookUpdateRequest;
 import com.tamercapital.tamercapital.model.Dtos.ViewDtos.BookViewRequest;
@@ -16,6 +17,9 @@ import com.tamercapital.tamercapital.repository.BookRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,13 +33,15 @@ public class BookManager implements BookService {
     private final AuthorService authorService;
     private final ImageService imageService;
     private final BookTypeService bookTypeService;
+    private final MongoTemplate mongoTemplate;
 
     @Autowired
-    public BookManager(BookRepository bookRepository, AuthorService authorService, ImageService imageService, BookTypeService bookTypeService) {
+    public BookManager(BookRepository bookRepository, AuthorService authorService, ImageService imageService, BookTypeService bookTypeService, MongoTemplate mongoTemplate) {
         this.bookRepository = bookRepository;
         this.authorService = authorService;
         this.imageService = imageService;
         this.bookTypeService = bookTypeService;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @Override
@@ -59,7 +65,6 @@ public class BookManager implements BookService {
         Optional<Image> image = this.imageService.findById(bookUpdateRequest.getImageId());
         Optional<BookType> bookType = this.bookTypeService.findById(bookUpdateRequest.getTypeId());
         Optional<Book> optionalBook = this.bookRepository.findById(id);
-
 
         Book book = optionalBook.get();
 
@@ -100,19 +105,19 @@ public class BookManager implements BookService {
         return this.bookRepository.findById(id);
     }
 
-    @Override
-    public List<Book> getBookByAuthor(String authorId) {
-        return  this.bookRepository.getBookByAuthor(authorId);
-    }
+
 
     @Override
-    public List<Book> getBooksByAuthorOrName(String authorName, String name) {
-        return  this.bookRepository.getBooksByAuthorOrName(authorName,name);
-    }
+    public List<Book> findByBookName(BookFilter bookFilter) {
+        Query query = new Query();
+        Criteria criteria = new Criteria();
 
-    @Override
-    public List<Book> findByBookNameKeyword(String keyword) {
-        return  this.bookRepository.findByBookNameKeyword(keyword);
+        criteria.orOperator(Criteria.where("author.id").is(bookFilter.getAuthorId()),
+        Criteria.where("bookType.id").is(bookFilter.getBookTypeId()),Criteria.where("name").is(bookFilter.getName()));
+
+        query.addCriteria(criteria);
+
+        return  mongoTemplate.find(query,Book.class);
     }
 
 

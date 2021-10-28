@@ -12,6 +12,7 @@ import com.tamercapital.tamercapital.repository.BookRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class BookManagerTest {
     private AuthorService authorService;
     private ImageService imageService;
     private BookTypeService bookTypeService;
+    private MongoTemplate mongoTemplate;
 
 
     @Before
@@ -39,9 +41,10 @@ public class BookManagerTest {
         authorService = Mockito.mock(AuthorService.class);
         imageService = Mockito.mock(ImageService.class);
         bookTypeService = Mockito.mock(BookTypeService.class);
+        mongoTemplate = Mockito.mock(MongoTemplate.class);
 
 
-        bookManager = new BookManager(bookRepository, authorService, imageService, bookTypeService);
+        bookManager = new BookManager(bookRepository, authorService, imageService, bookTypeService,mongoTemplate);
 
 
     }
