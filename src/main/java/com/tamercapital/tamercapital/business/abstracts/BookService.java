@@ -4,6 +4,7 @@ import com.tamercapital.tamercapital.model.Dtos.CreateDtos.BookCreateRequest;
 import com.tamercapital.tamercapital.model.Dtos.UpdateDtos.BookUpdateRequest;
 import com.tamercapital.tamercapital.model.Dtos.ViewDtos.BookViewRequest;
 import com.tamercapital.tamercapital.model.concretes.Book;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,5 +25,7 @@ public interface BookService {
 
     List<Book> getBooksByAuthorOrName(String author,String name);
 
-    List<Book> getBooksByAuthorFirstNameOrName(String authorName,String bookName);
+    List<Book> findByBookNameKeyword(String keyword);
+
+
 }

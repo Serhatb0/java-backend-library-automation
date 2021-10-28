@@ -15,6 +15,7 @@ import com.tamercapital.tamercapital.model.concretes.Image;
 import com.tamercapital.tamercapital.repository.BookRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -110,9 +111,10 @@ public class BookManager implements BookService {
     }
 
     @Override
-    public List<Book> getBooksByAuthorFirstNameOrName(String authorName, String bookName) {
-        return  this.bookRepository.getBooksByAuthorFirstNameOrName(authorName,bookName);
+    public List<Book> findByBookNameKeyword(String keyword) {
+        return  this.bookRepository.findByBookNameKeyword(keyword);
     }
+
 
 
 }

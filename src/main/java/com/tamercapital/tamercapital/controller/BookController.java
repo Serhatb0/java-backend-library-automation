@@ -35,9 +35,9 @@ public class BookController {
         return  ResponseEntity.ok(this.bookService.getBookByAuthor(authorId));
     }
 
-    @GetMapping("/getBooksByAuthorFirstNameOrName")
-    public  ResponseEntity<?> getBooksByAuthorFirstNameOrName(@RequestParam String authorName,@RequestParam String bookName){
-        return  ResponseEntity.ok(this.bookService.getBooksByAuthorFirstNameOrName(authorName,bookName));
+    @GetMapping("/findByBookNameKeyword")
+    public  ResponseEntity<?> findByBookNameKeyword(@RequestParam String keyword){
+        return  ResponseEntity.ok(this.bookService.findByBookNameKeyword(keyword));
     }
     @GetMapping("/getBooksByAuthorOrName")
     public  ResponseEntity<?> getBooksByAuthorOrName(@RequestParam String author , @RequestParam String name){

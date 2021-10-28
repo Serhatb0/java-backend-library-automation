@@ -12,6 +12,7 @@ import com.tamercapital.tamercapital.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -73,9 +74,10 @@ public class UserManagerTest {
     @Test(expected = RuntimeException.class)
     public void loginUserTest() {
         final LoginRequest loginRequest = new LoginRequest("serhat", "biricik");
+        MockHttpSession session = Mockito.mock(MockHttpSession.class);
 
-        doNothing().when(userManager).login(loginRequest);
-        verify(userManager, times(1)).login(loginRequest);
+        doNothing().when(userManager).login(loginRequest,session);
+        verify(userManager, times(1)).login(loginRequest,session);
 
 
     }
